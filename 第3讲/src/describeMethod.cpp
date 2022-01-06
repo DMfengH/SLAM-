@@ -6,7 +6,7 @@ using namespace std;
 using namespace Eigen;
 
 // 反对称矩阵
-Matrix3d pov(Vector3d p)
+Matrix3d hat(Vector3d p)
 {
   Matrix3d mat;
   mat << 0, -p(2), p(1),
@@ -22,7 +22,7 @@ Matrix4d quaternionADD(Vector4d p )
   mat.block(0,0,1,1) = p.block(0,0,1,1);
   mat.block(0,1,1,3) = -p.block(1,0,3,1).transpose();
   mat.block(1,0,3,1) = p.block(1,0,3,1);
-  mat.block(1,1,3,3) = p(0)* Matrix3d::Identity()  + pov(p.block(1,0,3,1));
+  mat.block(1,1,3,3) = p(0)* Matrix3d::Identity()  + hat(p.block(1,0,3,1));
 
   return mat;
 }
@@ -34,7 +34,7 @@ Matrix4d quaternionCirADD(Vector4d p )
   mat.block(0,0,1,1) = p.block(0,0,1,1);
   mat.block(0,1,1,3) = -p.block(1,0,3,1).transpose();
   mat.block(1,0,3,1) = p.block(1,0,3,1);
-  mat.block(1,1,3,3) = p(0)* Matrix3d::Identity()  - pov(p.block(1,0,3,1));
+  mat.block(1,1,3,3) = p(0)* Matrix3d::Identity()  - hat(p.block(1,0,3,1));
 
   return mat;
 }
@@ -64,8 +64,8 @@ Matrix3d quaternionTOmatrix2(Vector4d p)
   Matrix3d mat;
   Matrix3d temp1 = p.block(1,0,3,1) * p.block(1,0,3,1).transpose();
   Matrix3d temp2 = p(0) * p(0) * Matrix3d::Identity();
-  Matrix3d temp3 = 2 * p(0) * pov(p.block(1,0,3,1));
-  Matrix3d temp4 = pov(p.block(1,0,3,1)) * pov(p.block(1,0,3,1));
+  Matrix3d temp3 = 2 * p(0) * hat(p.block(1,0,3,1));
+  Matrix3d temp4 = hat(p.block(1,0,3,1)) * hat(p.block(1,0,3,1));
 
   mat =  temp1 + temp2  + temp3 + temp4;
   return mat;
