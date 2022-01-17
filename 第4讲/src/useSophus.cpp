@@ -50,4 +50,11 @@ int main(int argc, char **argv)
   Sophus::SE3d SE3_updated = Sophus::SE3d::exp(update_se3) * SE3_Rt;
   cout << "SE3 updated = " << endl << SE3_updated.matrix() << endl;
 
+  // 验证SE3*Vector3d，就是对三维点进行变换。
+  Vector3d point{1,0,1};
+  Vector3d se3TPoint = SE3_Rt * point;
+  cout << " TPoint" << se3TPoint.transpose() << "\n";
+  Vector3d selfTPoint = SE3_Rt.rotationMatrix() * point + SE3_Rt.translation();
+  cout << " ntPoint" << selfTPoint.transpose() << "\n";
+
 }

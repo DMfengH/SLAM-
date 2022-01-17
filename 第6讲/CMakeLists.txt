@@ -34,8 +34,8 @@ include_directories(${G2O_INCLUDE_DIRS})
 # 添加可执行程序
 # add_executable( helloSLAM ./src/helloSLAM.cpp)
 # add_executable( gaussNewton ./src/gaussNewton.cpp)
-# add_executable( ceresCurveFitting ./src/ceresCurveFitting.cpp)
-add_executable( g2oCurveFitting ./src/g2oCurveFitting.cpp)
+add_executable( ceresCurveFitting ./src/ceresCurveFitting.cpp)
+# add_executable( g2oCurveFitting ./src/g2oCurveFitting.cpp)
 
 # 添加头文件路径
 # target_include_directories()
@@ -43,5 +43,5 @@ add_executable( g2oCurveFitting ./src/g2oCurveFitting.cpp)
 # 把可执行文件与库文件链接上
 # target_link_libraries(jointMap ${OpenCV_LIBS} ${Pangolin_LIBRARIES})
 # target_link_libraries(gaussNewton ${OpenCV_LIBS})
-# target_link_libraries(ceresCurveFitting ${CERES_LIBRARIES} ${OpenCV_LIBS})    # 这里面大小写有区别，写成Ceres_LIBRAREIS就找不到的。【这个变量定义的值就是‘ceres’，】
-target_link_libraries(g2oCurveFitting ${OpenCV_LIBS} ${G2O_CORE_LIBRARY} ${G2O_STUFF_LIBRARY})    # 添加G2O库的这几个变量名字不太一样。
+target_link_libraries(ceresCurveFitting ${CERES_LIBRARIES} ${OpenCV_LIBS})    # 这里面大小写有区别，写成Ceres_LIBRAREIS就找不到的。【这个变量定义的值就是‘ceres’，】
+# target_link_libraries(g2oCurveFitting ${OpenCV_LIBS} ${G2O_CORE_LIBRARY} ${G2O_STUFF_LIBRARY})    # 添加G2O库的这几个变量名字不太一样。

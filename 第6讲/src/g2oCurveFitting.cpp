@@ -15,6 +15,8 @@
 using namespace std;
 
 // 顶点：需要优化的参数
+// 第一个模板参数是维度信息，有关 estimate在流型空间中的最小维度，海塞矩阵的维度，b的维度【b是线性方程右侧的】
+// 第二个模板参数是estimate的类型
 class CurveFittingVertex : public g2o::BaseVertex<3, Eigen::Vector3d> {
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -35,7 +37,8 @@ public:
 
 
 // 边【y是测量值】：误差计算、雅克比计算
-// 第一个模板参数 1 是表示误差向量和信息矩阵的维度的，第二个模板参数 double 是表示测量值类型的【类型也就包括了维度信息】
+// 第一个模板参数 1 是表示误差向量和信息矩阵的维度的[类型是Eigen::Matrix]，第二个模板参数 double 是表示测量值类型的【类型也就包括了维度信息】
+// jacobian是一个Eigen::Matrix，维度是第一个参数 * 第三个参数的维度
 class CurveFittingEdge : public g2o::BaseUnaryEdge<1, double, CurveFittingVertex> {   
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -122,8 +125,8 @@ int main(int argc, char **argv){
     y_data.push_back(exp(ar*x*x + br*x + cr) + rng.gaussian(w_sigma*w_sigma));
   }
 
-  // g2o::BlockSolverTraits<p, l> 这个里面就是typedef了几个类型的Eigen::matrix【其中包括下面的BlockSolverType::PoseMatrixType】： p代表位姿维度，l代表路标维度
-  // 猜测：对于一元边来说，只使用了p，没有用l，所以l定义成多少，都无所谓。
+  // g2o::BlockSolverTraits<p, l> 这个里面就是为了typedef几个类型的Eigen::matrix【其中包括下面的BlockSolverType::PoseMatrixType】： p代表位姿维度，l代表路标维度
+  // 猜测：下面只用了PoseMatrixType，即只使用了p，没有用l，所以l定义成多少，都无所谓。
   typedef g2o::BlockSolver<g2o::BlockSolverTraits<3, 1>> BlockSolverType;     
   typedef g2o::LinearSolverDense<BlockSolverType::PoseMatrixType> LinearSolverType;
 

@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 # 声明c++标准，这两个set有什么关系呢？？？
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "-std=c++11")
 
 # 声明一个cmake工程
@@ -16,6 +16,7 @@ project(SLAM14)
 find_package(Pangolin REQUIRED)
 find_package(Sophus)
 find_package(OpenCV REQUIRED)
+find_package(Ceres)
 
 # 添加头文件
 include_directories( "/usr/include/eigen3")
@@ -33,7 +34,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 # add_executable( plotTrajectory ./src/plotTrajectory.cpp)
 # add_executable( useSophus ./src/useSophus.cpp)
 # add_executable (trajectoryError ./src/trajectoryError.cpp)
-add_executable (test ./test1.cpp)
+add_executable (test3 ./test3.cpp)
 
 # 添加头文件路径
 # target_include_directories()
@@ -42,7 +43,7 @@ add_executable (test ./test1.cpp)
 # target_link_libraries(useHello hello)
 # target_link_libraries(plotTrajectory ${Pangolin_LIBRARIES})
 # target_link_libraries(trajectoryError ${Pangolin_LIBRARIES})
-target_link_libraries(test ${OpenCV_LIBS})
+target_link_libraries(test3 ${CERES_LIBRARIES})
 
 
 

@@ -27,8 +27,8 @@ include_directories(${Sophus_INCLUDE_DIRS})
 # add_executable( coordinateTransform ./src/coordinateTransform.cpp)
 # add_executable( describeMethod ./src/describeMethod.cpp)
 # add_executable( plotTrajectory ./src/plotTrajectory.cpp)
-# add_executable( useSophus ./src/useSophus.cpp)
-add_executable (trajectoryError ./src/trajectoryError.cpp)
+add_executable( useSophus ./src/useSophus.cpp)
+# add_executable (trajectoryError ./src/trajectoryError.cpp)
 
 # 添加头文件路径
 # target_include_directories()
@@ -36,7 +36,7 @@ add_executable (trajectoryError ./src/trajectoryError.cpp)
 # 把可执行文件与库文件链接上
 # target_link_libraries(useHello hello)
 # target_link_libraries(plotTrajectory ${Pangolin_LIBRARIES})
-target_link_libraries(trajectoryError ${Pangolin_LIBRARIES})
+# target_link_libraries(trajectoryError ${Pangolin_LIBRARIES})
 
 
 

@@ -17,12 +17,25 @@ struct CURVE_FITTING_COST {
   const double _x, _y;
 };
 
-// 把三个参数作为一个参数块的。
+// 第一个模板参数是rediduals的大小，
+// 后面的参数代表优化参数块，有几个模板参数，就有几个优化参数块，parameter的第一维就有多大，
+// 模板参数的数值代表优化参数块的大小，即parameter第二维的大小
+// jacobians[i], is an
+// array that contains num_residuals_* parameter_block_sizes_[i]
+// elements. Each jacobian block is stored in row-major order, i.e.,
+//
+//   jacobians[i][r*parameter_block_size_[i] + c] =
+//                              d residual[r] / d parameters[i][c]
+//
+// g2o中是要设置优化变量的更新方式的，而ceres没有设置，是怎么更新的优化变量呢？？？
+// ceres的优化变量更新方式设置，是在problem的AddParameterBlock的LocalParameterization中！！！
+
 struct NUM_CURVE_FITTING_COST : public ceres::SizedCostFunction<1,3>{
 
   NUM_CURVE_FITTING_COST(double x, double y) : _x(x), _y(y){}
   virtual ~NUM_CURVE_FITTING_COST(){};
-
+  
+  // 这三个参数的类型是固定的？ Evaluate是抽象基类的纯虚函数
   virtual bool Evaluate(double const* const* parameters, double *residuals, double** jacobians) const
   {
 
@@ -110,10 +123,17 @@ int main(int argc, char **argv)
     // );
 
     // 手动给出雅克比求导。
+    // 用户在调用AddResidualBlock( )时其实已经隐式地向Problem传递了参数模块，
+    // 但在一些情况下，需要用户显示地向Problem传入参数模块（通常出现在需要对优化参数进行重新参数化的情况）。
+    // Ceres提供了Problem::AddParameterBlock( )函数用于用户显式传递参数模块:
+    // 例： void Problem::AddParameterBlock(double *values, int size, LocalParameterization *local_parameterization)
+    // 函数里面设置：更新方法、优化参数的实际维度、内部优化时参数的维度、这两种参数的雅克比矩阵
+
+
     problem.AddResidualBlock(                                   // 残差块
-      new NUM2_CURVE_FITTING_COST(x_data[i],y_data[i]),
-      nullptr,      // 核函数     
-      a,b,c           // 待估计参数
+      new NUM2_CURVE_FITTING_COST(x_data[i],y_data[i]),         // CostFunction *cost_function, 
+      nullptr,                                                  // LossFunction *loss_function,   
+      a,b,c                                                     // const vector<double *> parameter_blocks 、或者 double *x0, double *x1, ...
     );
   }
 
